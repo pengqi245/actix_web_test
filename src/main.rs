@@ -1,7 +1,6 @@
 #[macro_use]
 extern crate lazy_static;
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
-use dotenv::dotenv;
+use actix_web::{App, HttpServer};
 use fast_log::log::RuntimeType;
 use rbatis::rbatis::Rbatis;
 
@@ -16,19 +15,6 @@ lazy_static! {
     static ref RB:Rbatis=Rbatis::new();
 }
 
-// default / handler
-async fn index() -> impl Responder {
-    HttpResponse::Ok().body(r#"
-        Welcome to Actix-web with SQLx Todos example.
-        Available routes:
-        GET /todos -> list of all todos
-        POST /todo -> create new todo, example: { "description": "learn actix and sqlx", "done": false }
-        GET /todo/{id} -> show one todo with requested id
-        PUT /todo/{id} -> update todo with requested id, example: { "description": "learn actix and sqlx", "done": true }
-        DELETE /todo/{id} -> delete todo with requested id
-    "#
-    )
-}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -39,7 +25,6 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .route("/", web::get().to(index))
             .configure(endpoints::routes::init)
     })
     .bind("127.0.0.1:8080")?

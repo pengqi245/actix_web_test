@@ -1,7 +1,7 @@
-use super::model::MyObj;
+use super::model::{MyObj, User};
 use crate::RB;
-use actix_web::{get, web, HttpResponse, Result};
-use serde_json::{json, Value};
+use actix_web::{get, web, HttpResponse};
+use serde_json::{json};
 
 #[get("/test")]
 pub async fn test() -> HttpResponse{
@@ -11,10 +11,9 @@ pub async fn test() -> HttpResponse{
     })
 }
 
-#[get("/test2")]
+#[get("/")]
 async fn test2() -> HttpResponse {
-    let v: Result<i32, rbatis_core::Error> = RB.fetch("", "SELECT count(1) FROM user;").await;
-    HttpResponse::Ok().body(format!("count(1)={}", v.unwrap_or(0)))
+    HttpResponse::Ok().body("hello word")
 }
 
 #[get("/test3")]
@@ -27,8 +26,18 @@ async fn test3() -> HttpResponse {
     HttpResponse::Ok().body(data)
 }
 
+#[get("/test4")]
+async fn test4() -> HttpResponse {
+    let sql = r#" 
+        select * from user
+        "#;
+    let data: Vec<User>= RB.py_fetch("", sql, &json!({})).await.unwrap();
+    HttpResponse::Ok().json(data)
+}
+
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(test);
     cfg.service(test2);
     cfg.service(test3);
+    cfg.service(test4);
 }
