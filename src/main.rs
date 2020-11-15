@@ -4,11 +4,12 @@ use actix_web::{App, HttpServer};
 use fast_log::log::RuntimeType;
 use rbatis::rbatis::Rbatis;
 
-mod endpoints;
+mod controller;
+extern crate chrono;
 
 
 //示例 mysql 链接地址
-pub const MYSQL_URL: &'static str = "mysql://root:123456@localhost:3306/user";
+pub const MYSQL_URL: &'static str = "mysql://root:123456@localhost:3306/simple";
 
 // 示例-Rbatis示例初始化(必须)
 lazy_static! {
@@ -25,7 +26,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .configure(endpoints::routes::init)
+            .configure(controller::users::service::init)
     })
     .bind("127.0.0.1:8080")?
     .run()
