@@ -21,5 +21,5 @@ pub struct UserModel {
     pub name: String,
     pub email: String,
     pub phone_number: String,
-    pub cteate_date: String
+    pub cteate_date: Option<NaiveDateTime>
 }
