@@ -18,6 +18,7 @@ pub struct User {
 
 #[derive(Serialize, Deserialize, Clone, Debug)] 
 pub struct UserModel {
+    pub id: Option<i64>,
     pub name: String,
     pub email: String,
     pub phone_number: String,
