@@ -1,4 +1,5 @@
-use super::model::{MyObj, UserModel};
+use crate::entity::test_entity::MyObj;
+use crate::entity::user_entity::UserEntity;
 use crate::RB;
 use actix_web::{delete, get, post, put, web, HttpResponse};
 use chrono::prelude::*;
@@ -23,7 +24,7 @@ async fn get_users() -> HttpResponse {
 }
 
 #[post("/user")]
-async fn add_user(user: web::Json<UserModel>) -> HttpResponse {
+async fn add_user(user: web::Json<UserEntity>) -> HttpResponse {
     let create_date = match user.cteate_date {
         None => {
             let local: DateTime<Local> = Local::now();
@@ -55,7 +56,7 @@ async fn delete_user(web::Path(id): web::Path<i32>) -> HttpResponse {
 }
 
 #[put("/user")]
-async fn update_user(user: web::Json<UserModel>) -> HttpResponse {
+async fn update_user(user: web::Json<UserEntity>) -> HttpResponse {
     let id = match user.id {
         None => return HttpResponse::BadRequest().body("Id cannot empty!"),
         Some(i) => i,
